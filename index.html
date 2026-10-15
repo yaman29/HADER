@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#24614F">
+<meta name="description" content="حاضر: يحمي لحظات الوالد مع أبنائه من سحب الجوال، ويعينه على الرجوع لهم بلطف.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>حاضر</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Reem+Kufi:wght@700&display=swap">
+<style>
+/* Layout: phone-first single column (max 460px). Onboarding = full-screen swipe deck; moment = full-screen night layer; actions in bottom sheets.
+   Mood: an evening at home — pine green for calm, a lamp-amber glow for "presence", deep slate night for the protected moment. */
+:root{
+  --bg:#F6F6F3; --surface:#FFFFFF; --sunk:#EEEEE8; --ink:#17212B; --muted:#5E6873; --line:#E2E2DB;
+  --accent:#24614F; --accent-ink:#FFFFFF; --accent-soft:#E2EDE8;
+  --lamp:#D9962A; --lamp-soft:#FBF0DA;
+  --night:#14222C; --night-2:#1C2E3A; --night-ink:#F3F1EA; --night-muted:#A4AEB6;
+  --f-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,system-ui,sans-serif;
+  --f-logo:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1418; --surface:#161D22; --sunk:#1C252B; --ink:#ECEDE8; --muted:#9AA3AC; --line:#263038;
+  --accent:#6CC2A4; --accent-ink:#0B1A15; --accent-soft:#182B25;
+  --lamp:#F0B44E; --lamp-soft:#2D2516;
+  --night:#0B1217; --night-2:#142028; --night-ink:#EEECE5; --night-muted:#8E99A2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1418; --surface:#161D22; --sunk:#1C252B; --ink:#ECEDE8; --muted:#9AA3AC; --line:#263038;
+  --accent:#6CC2A4; --accent-ink:#0B1A15; --accent-soft:#182B25;
+  --lamp:#F0B44E; --lamp-soft:#2D2516;
+  --night:#0B1217; --night-2:#142028; --night-ink:#EEECE5; --night-muted:#8E99A2; color-scheme:dark}
+
+html,body{height:100%;direction:rtl;text-align:right}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.gut{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.app{max-width:460px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
+.muted{color:var(--muted)}
+
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;padding-block:18px 6px}
+.logo{font-family:var(--f-logo);font-weight:700;font-size:26px;color:var(--accent);line-height:1;display:flex;align-items:center;gap:8px}
+.logo i{width:10px;height:10px;border-radius:50%;background:var(--lamp);box-shadow:0 0 0 4px var(--lamp-soft)}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:0;background:var(--sunk);display:grid;place-items:center;color:var(--muted)}
+.icon-btn svg{width:18px;height:18px}
+.icon-btn svg[hidden]{display:none}
+.icon-btn.txt{font-size:13px;font-weight:700;color:var(--ink);font-family:var(--f-body)}
+.hdr{display:flex;gap:8px;align-items:center}
+html[dir="ltr"],html[dir="ltr"] body{direction:ltr;text-align:left}
+
+main{flex:1;padding-block:8px 32px}
+.view{display:flex;flex-direction:column;gap:28px}
+.view[hidden]{display:none!important}
+
+/* home */
+.greet h1{font-size:30px;font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.greet p{color:var(--muted);margin-top:4px}
+.picker{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{border:0;background:var(--surface);border-radius:20px;padding:16px 16px 14px;text-align:start;display:flex;flex-direction:column;gap:10px;box-shadow:0 0 0 1px var(--line) inset;transition:box-shadow .15s,background .15s;min-width:0}
+.opt svg{width:26px;height:26px;stroke:var(--muted);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.opt strong{font-size:16.5px;font-weight:600;display:block;line-height:1.3}
+.opt small{font-size:13px;color:var(--muted)}
+.opt[aria-pressed="true"]{background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent) inset}
+.opt[aria-pressed="true"] svg{stroke:var(--accent)}
+.go{border:0;border-radius:20px;background:var(--accent);color:var(--accent-ink);padding:18px;font-size:18px;font-weight:600;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
+.go svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.go:active{transform:scale(.99)}
+.glance{background:var(--surface);border-radius:20px;padding:18px;display:flex;gap:16px;align-items:center;box-shadow:0 0 0 1px var(--line) inset}
+.glance .mini-ring{flex:none;width:58px;height:58px}
+.glance p{font-size:15.5px;line-height:1.55}
+.glance p b{font-weight:600}
+.glance .lnk{border:0;background:none;color:var(--accent);font-weight:600;padding:0;margin-top:4px;font-size:14.5px}
+.sample-note{font-size:12.5px;color:var(--muted)}
+
+/* week */
+.big{font-size:40px;font-weight:700;line-height:1.15;letter-spacing:-.01em}
+.big span{color:var(--accent)}
+.sec h2{font-size:17px;font-weight:600;margin-bottom:14px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:150px}
+.day{display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end;min-width:0}
+.day .bar{width:100%;max-width:28px;border-radius:8px;background:var(--accent);min-height:4px}
+.day .bar.zero{background:var(--sunk)}
+.day.today .bar{background:var(--lamp)}
+.day small{font-size:11.5px;color:var(--muted)}
+.day em{font-style:normal;font-size:11.5px;color:var(--ink);font-variant-numeric:tabular-nums}
+.pulls{display:flex;flex-direction:column;gap:14px}
+.pull{display:grid;grid-template-columns:58px 1fr 28px;gap:12px;align-items:center;font-size:15px}
+.pull .t{height:8px;background:var(--sunk);border-radius:999px;overflow:hidden}
+.pull .t i{display:block;height:100%;background:var(--ink);opacity:.75;border-radius:999px}
+.pull b{font-weight:500;text-align:end;font-variant-numeric:tabular-nums}
+.thoughts{display:flex;flex-direction:column;gap:12px}
+.thought{background:var(--surface);border-radius:18px;padding:16px 18px;box-shadow:0 0 0 1px var(--line) inset;font-size:15.5px}
+.thought.warm{background:var(--lamp-soft);box-shadow:none}
+.plain{border:0;background:none;color:var(--muted);text-decoration:underline;text-underline-offset:4px;font-size:14px;padding:4px 0;align-self:flex-start}
+
+/* people */
+.lead{font-size:16px;color:var(--muted)}
+.replies{display:flex;flex-direction:column;gap:10px}
+.reply{background:var(--surface);border-radius:18px;padding:16px 18px;display:flex;gap:12px;align-items:flex-start;box-shadow:0 0 0 1px var(--line) inset}
+.reply p{flex:1;min-width:0;font-size:15.5px}
+.copy{flex:none;border:0;background:var(--sunk);border-radius:999px;padding:6px 14px;font-size:13.5px;font-weight:600}
+.copy.done{background:var(--accent);color:var(--accent-ink)}
+.when{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted);flex-wrap:wrap}
+.when select{border:0;background:var(--sunk);color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;font-weight:600}
+.vip{display:flex;flex-direction:column;gap:2px}
+.vip-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.vip-row:last-child{border-bottom:0}
+.av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:15px;background:var(--accent-soft);color:var(--accent);flex:none}
+.vip-row div{flex:1;min-width:0}
+.vip-row small{display:block;color:var(--muted);font-size:13px}
+.vip-row .ok{font-size:13px;color:var(--accent);font-weight:600}
+details.how{background:var(--surface);border-radius:18px;box-shadow:0 0 0 1px var(--line) inset}
+details.how summary{list-style:none;padding:16px 18px;font-weight:600;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+details.how summary::-webkit-details-marker{display:none}
+details.how summary::after{content:"+";font-size:22px;font-weight:400;color:var(--muted);line-height:1}
+details.how[open] summary::after{content:"−"}
+details.how ol{margin:0;padding:0 38px 18px 18px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.os{display:flex;gap:6px;padding:0 18px 12px}
+.os button{border:0;background:var(--sunk);border-radius:999px;padding:5px 14px;font-size:13.5px}
+.os button[aria-pressed="true"]{background:var(--ink);color:var(--bg);font-weight:600}
+
+/* tab bar */
+.tabs{position:sticky;bottom:0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+.tabs button{border:0;background:none;padding:10px 4px 12px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12.5px;color:var(--muted)}
+.tabs svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tabs button[aria-selected="true"]{color:var(--ink);font-weight:600}
+.tabs button[aria-selected="true"] svg{stroke:var(--accent)}
+
+/* ===== onboarding ===== */
+.onb{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;justify-content:center}
+.onb-in{width:100%;max-width:460px;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+.onb-top{display:flex;justify-content:space-between;align-items:center;padding-block:16px 0}
+.skip{border:0;background:none;color:var(--muted);font-size:15px;padding:6px 0}
+.deck{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.deck::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;gap:30px;padding-block:12px;min-width:0}
+.slide h2{font-size:29px;font-weight:700;line-height:1.35;letter-spacing:-.01em}
+.slide p.s{font-size:17px;color:var(--muted);line-height:1.7}
+.stage{height:250px;border-radius:28px;background:var(--sunk);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:22px}
+.onb-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:8px}
+.dots{display:flex;gap:7px}
+.dots i{width:7px;height:7px;border-radius:999px;background:var(--line);transition:width .25s,background .25s}
+.dots i.on{width:22px;background:var(--accent)}
+.next{border:0;background:var(--ink);color:var(--bg);border-radius:999px;padding:13px 26px;font-weight:600;font-size:16px}
+
+/* stage pieces */
+.notif{background:var(--surface);border-radius:18px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:0 6px 20px rgba(10,20,30,.08)}
+.notif .ap{width:34px;height:34px;border-radius:9px;flex:none;display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;background:#2BA84A}
+.notif .ap.b{background:#4A6FD8}
+.notif div{min-width:0;flex:1}
+.notif b{display:block;font-size:14px;font-weight:600}
+.notif small{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bub{max-width:82%;padding:12px 16px;border-radius:20px;font-size:16px;line-height:1.5}
+.bub.kid{align-self:flex-end;background:var(--surface);border-bottom-left-radius:6px;box-shadow:0 0 0 1px var(--line) inset}
+.bub.dad{align-self:flex-start;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:6px}
+.bub small{display:block;font-size:12px;opacity:.75;margin-bottom:2px}
+.held{border:1.5px dashed var(--line);border-radius:16px;padding:12px 14px;font-size:14.5px;color:var(--muted);display:flex;align-items:center;gap:10px}
+.held svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+.pass{background:var(--surface);border-radius:16px;padding:10px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 0 0 1px var(--line) inset}
+.pass b{font-size:15px;font-weight:600}
+.pass small{display:block;font-size:12.5px;color:var(--accent);font-weight:600}
+.bigstat{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
+.bigstat b{font-size:48px;font-weight:700;color:var(--accent);line-height:1.1}
+.bigstat span{color:var(--muted);font-size:15px}
+.minibars{display:flex;gap:8px;align-items:end;justify-content:center;height:60px;margin-top:10px}
+.minibars i{width:16px;border-radius:5px;background:var(--accent);opacity:.85}
+.minibars i:last-child{background:var(--lamp);opacity:1}
+.slide .anim{opacity:1}
+.slide.on .anim{animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
+.slide.on .anim.d1{animation-delay:.25s}.slide.on .anim.d2{animation-delay:.6s}.slide.on .anim.d3{animation-delay:.95s}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.namebox{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:18px;padding:6px 18px;box-shadow:0 0 0 1.5px var(--line) inset;font-size:20px}
+.namebox span{color:var(--muted);font-weight:500}
+.namebox input{flex:1;min-width:0;border:0;background:none;font:inherit;font-weight:600;color:var(--ink);padding:12px 0;outline:none}
+.namebox:focus-within{box-shadow:0 0 0 2px var(--accent) inset}
+.sugs{display:flex;flex-wrap:wrap;gap:8px}
+.sug{border:0;background:var(--sunk);border-radius:999px;padding:8px 16px;font-size:15px}
+.preview{font-size:15px;color:var(--muted)}
+.preview b{color:var(--ink);font-weight:500}
+
+/* ===== moment layer ===== */
+.layer{position:fixed;inset:0;z-index:20;background:radial-gradient(120% 70% at 50% 30%,var(--night-2),var(--night));color:var(--night-ink);display:flex;justify-content:center;overflow:auto}
+/* moment scenes: the layer is always a dark sky, chosen by the hour and the moment (single look by design) */
+.layer[data-scene="night"]{background:linear-gradient(180deg,#071023 0%,#0D1B36 55%,#15284A 100%)}
+.layer[data-scene="dusk"]{background:linear-gradient(180deg,#1B1F3C 0%,#3E2F55 48%,#8E5246 100%)}
+.layer[data-scene="day"]{background:linear-gradient(180deg,#0F3A3B 0%,#18504D 55%,#25655C 100%)}
+#sky{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.layer-in{position:relative;z-index:1}
+.layer-in{width:100%;max-width:460px;display:flex;flex-direction:column;gap:26px;
+  padding-top:calc(22px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+  padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px))}
+.ly-top{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--night-muted)}
+.ly-top .quiet{display:flex;align-items:center;gap:6px}
+.ly-top .quiet svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.layer h2{font-size:30px;font-weight:700;line-height:1.3;text-align:center}
+.glow{align-self:center;width:230px;max-width:100%;aspect-ratio:1;border-radius:50%;position:relative;display:grid;place-items:center}
+.glow::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--lamp) 34%,transparent) 0%,transparent 68%);animation:breathe 6s ease-in-out infinite}
+.glow::after{content:"";position:absolute;inset:34px;border-radius:50%;border:1px solid color-mix(in srgb,var(--night-ink) 22%,transparent)}
+.glow > div{position:relative;z-index:1;text-align:center}
+.clock{font-size:52px;font-weight:300;font-variant-numeric:tabular-nums;direction:ltr;line-height:1}
+.ints{font-size:14px;color:var(--night-muted);margin-top:6px}
+@keyframes breathe{0%,100%{transform:scale(.9);opacity:.75}50%{transform:scale(1);opacity:1}}
+.ask{text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
+.ask small{color:var(--night-muted);font-size:13.5px}
+.ask p{font-size:20px;font-weight:500;line-height:1.5}
+.ask button{border:0;background:none;color:var(--night-muted);font-size:14px;text-decoration:underline;text-underline-offset:4px;padding:4px}
+.ly-actions{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.btn-n{border:0;border-radius:20px;padding:17px;font-size:17px;font-weight:600;background:var(--night-ink);color:var(--night)}
+.btn-n.o{background:color-mix(in srgb,var(--night-ink) 10%,transparent);color:var(--night-ink)}
+.try{border:0;background:none;color:var(--night-muted);font-size:13.5px;padding:6px}
+.mode{display:flex;flex-direction:column;gap:22px;flex:1;animation:fadeIn .35s ease-out}
+.mode[hidden]{display:none!important}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}}
+#glowBox.swap > div{animation:fadeIn .4s ease-out}
+.away-note{text-align:center;font-size:17px;line-height:1.7;color:var(--night-ink);max-width:30ch;align-self:center}
+.say-n{background:color-mix(in srgb,var(--night-ink) 9%,transparent);border:1px solid color-mix(in srgb,var(--night-ink) 16%,transparent);border-radius:24px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.say-n small{color:var(--lamp);font-weight:600;font-size:13px}
+.say-n p{font-size:21px;font-weight:600;line-height:1.55}
+.say-n .why{font-size:13.5px;color:var(--night-muted);line-height:1.55;border-top:1px solid color-mix(in srgb,var(--night-ink) 14%,transparent);padding-top:8px}
+.say-n button{border:0;background:none;color:var(--night-muted);font-size:14px;text-decoration:underline;text-underline-offset:4px;align-self:flex-start;padding:2px 0}
+.bk-reason{display:flex;flex-direction:column;gap:10px}
+.bk-reason small{color:var(--night-muted);font-size:14px}
+.layer .chip{background:color-mix(in srgb,var(--night-ink) 10%,transparent);color:var(--night-ink)}
+.layer .chip[aria-pressed="true"]{background:var(--night-ink);color:var(--night)}
+.btn-n.gold{background:var(--lamp);color:#1B1408}
+@media (prefers-reduced-motion:reduce){.mode,#glowBox.swap > div{animation:none}}
+@media (prefers-reduced-motion:reduce){.glow::before,.slide.on .anim,.sheet{animation:none!important}}
+
+/* ===== sheet ===== */
+.scrim{position:fixed;inset:0;background:rgba(6,12,16,.5);z-index:30}
+.sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:460px;background:var(--surface);color:var(--ink);z-index:31;border-radius:28px 28px 0 0;max-height:90%;overflow:auto;display:flex;flex-direction:column;gap:18px;
+  padding-top:12px;padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px));animation:up .28s cubic-bezier(.2,.8,.2,1)}
+.sheet::before{content:"";width:40px;height:5px;border-radius:9px;background:var(--line);align-self:center;margin-bottom:4px}
+@keyframes up{from{transform:translateY(30px);opacity:.5}}
+.sheet h3{font-size:22px;font-weight:700;line-height:1.35}
+.say{background:var(--accent-soft);border-radius:22px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.say small{color:var(--accent);font-weight:600;font-size:13px}
+.say p{font-size:21px;font-weight:600;line-height:1.5}
+.say .why{font-size:13.5px;color:var(--muted);line-height:1.55;border-top:1px solid color-mix(in srgb,var(--accent) 18%,transparent);padding-top:8px}
+.gsel{display:flex;gap:8px}
+.gsel button{flex:1;border:0;background:var(--sunk);border-radius:16px;padding:13px;font-size:16.5px;font-weight:500}
+.gsel button[aria-pressed="true"]{background:var(--ink);color:var(--bg);font-weight:600}
+.say button{border:0;background:none;color:var(--accent);font-size:14px;font-weight:500;align-self:flex-start;padding:2px 0}
+.q{font-size:14.5px;color:var(--muted);font-weight:500;margin-bottom:-8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:0;background:var(--sunk);border-radius:999px;padding:9px 18px;font-size:15px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);font-weight:600}
+.cta{border:0;border-radius:18px;background:var(--accent);color:var(--accent-ink);padding:17px;font-size:17px;font-weight:600;width:100%}
+.cta2{border:0;background:none;color:var(--muted);font-size:15px;padding:6px;align-self:center}
+.countdown{font-size:46px;font-weight:300;text-align:center;font-variant-numeric:tabular-nums;direction:ltr}
+.endstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.endstats b{display:block;font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
+.endstats span{font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:11px 20px;border-radius:999px;font-size:15px;z-index:60;max-width:calc(100% - 40px);text-align:center}
+</style>
+
+</head>
+<body>
+<div class="app" dir="rtl" lang="ar">
+  <header class="top gut">
+    <div class="logo"><i></i>حاضر</div>
+    <div class="hdr">
+    <button class="icon-btn txt" id="langBtn" type="button" aria-label="English / العربية">EN</button>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="الوضع الداكن أو الفاتح">
+      <svg id="icMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+      <svg id="icSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" hidden><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <button class="icon-btn" id="helpBtn" type="button" aria-label="كيف يشتغل حاضر">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.2 9a3 3 0 1 1 4.3 2.7c-.9.4-1.5 1.1-1.5 2.1v.4"/><circle cx="12" cy="18" r=".6" fill="currentColor"/></svg>
+    </button>
+    </div>
+  </header>
+
+  <main class="gut">
+    <!-- moment -->
+    <section class="view" id="v-home">
+      <div class="greet">
+        <h1 id="greet">مساء الخير</h1>
+        <p id="greetSub">وش اللحظة الجاية مع عيالك؟</p>
+      </div>
+      <div class="picker" id="picker" role="group" aria-label="اختر اللحظة"></div>
+      <button class="go" id="startBtn" type="button">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none"/></svg>
+        ابدأ اللحظة
+      </button>
+      <div class="glance">
+        <svg class="mini-ring" viewBox="0 0 60 60" aria-hidden="true">
+          <circle cx="30" cy="30" r="25" fill="none" stroke="var(--sunk)" stroke-width="6"/>
+          <circle id="ringArc" cx="30" cy="30" r="25" fill="none" stroke="var(--lamp)" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 157" transform="rotate(-90 30 30)"/>
+        </svg>
+        <div>
+          <p id="glanceText">ابدأ أول لحظة، وهنا بتشوف أسبوعك.</p>
+          <button class="lnk" type="button" data-go="week">شوف أسبوعك</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- week -->
+    <section class="view" id="v-week" hidden>
+      <div>
+        <p class="muted" style="margin-bottom:6px">هالأسبوع كنت معهم</p>
+        <p class="big" id="weekBig">٠ دقيقة</p>
+        <p class="sample-note" id="sampleNote" hidden style="margin-top:8px">هذي أرقام توضيحية، تختفي أول ما تبدأ لحظتك الأولى.</p>
+      </div>
+      <div class="sec"><h2>يوم بيوم</h2><div class="days" id="days"></div></div>
+      <div class="sec"><h2>وش اللي سحبك؟</h2><div class="pulls" id="pulls"></div></div>
+      <div class="sec"><h2>لك أنت</h2><div class="thoughts" id="thoughts"></div></div>
+      <button class="plain" type="button" id="clearSample" hidden>امسح الأرقام التوضيحية</button>
+    </section>
+
+    <!-- people -->
+    <section class="view" id="v-people" hidden>
+      <div class="greet">
+        <h1>ما يفوتك شي مهم</h1>
+        <p class="lead">أكثر شي يخلّينا نمسك الجوال وقت العيال: الخوف إن شي مهم يفوتنا.</p>
+      </div>
+      <div class="sec">
+        <h2>المهمّين يوصلونك دايم</h2>
+        <div class="vip">
+          <div class="vip-row"><span class="av">أ</span><div><b>الوالدة</b><small>مكالماتها ورسايلها</small></div><span class="ok">تمرّ</span></div>
+          <div class="vip-row"><span class="av">م</span><div><b>المدرسة</b><small>أي اتصال من رقم المدرسة</small></div><span class="ok">تمرّ</span></div>
+          <div class="vip-row"><span class="av">!</span><div><b>أي أحد يتصل مرتين</b><small>لأن اللي يعيد الاتصال غالبًا عنده شي ضروري</small></div><span class="ok">يمرّ</span></div>
+        </div>
+      </div>
+      <details class="how">
+        <summary>كيف أفعّلها في جوالي؟</summary>
+        <div class="os" role="group" aria-label="نوع الجوال"><button type="button" data-os="ios" aria-pressed="true">آيفون</button><button type="button" data-os="android" aria-pressed="false">أندرويد</button></div>
+        <ol id="os-ios">
+          <li>الإعدادات ← التركيز ← (+) ← مخصص، وسمّه «حاضر».</li>
+          <li>من «الأشخاص» أضف المهمّين عندك.</li>
+          <li>فعّل «السماح بتكرار المكالمات».</li>
+        </ol>
+        <ol id="os-android" hidden>
+          <li>الإعدادات ← الإشعارات ← عدم الإزعاج.</li>
+          <li>من «الأشخاص» أضف المهمّين عندك.</li>
+          <li>فعّل «المتصلون المتكررون».</li>
+        </ol>
+      </details>
+      <div class="sec">
+        <h2>والباقي يستاهل رد لطيف</h2>
+        <div class="when"><label for="backAt">أرجع للرد الساعة</label><select id="backAt"></select></div>
+        <div class="replies" id="replies" style="margin-top:12px"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs gut" role="tablist" aria-label="الأقسام">
+    <button type="button" role="tab" data-tab="home" aria-selected="true">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/></svg>اللحظة</button>
+    <button type="button" role="tab" data-tab="week" aria-selected="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19v-6M12 19V6M19 19v-9"/></svg>أسبوعي</button>
+    <button type="button" role="tab" data-tab="people" aria-selected="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 5 6.5v5c0 4.3 3 7.6 7 9 4-1.4 7-4.7 7-9v-5z"/></svg>المهمّين</button>
+  </nav>
+</div>
+
+<!-- onboarding -->
+<div class="onb" id="onb" hidden dir="rtl" lang="ar">
+  <div class="onb-in">
+    <div class="onb-top gut"><div class="logo"><i></i>حاضر</div><button class="skip" type="button" id="skip">تخطّي</button></div>
+    <div class="deck" id="deck">
+      <div class="slide gut">
+        <div class="stage">
+          <div class="bub kid anim"><small>ولدك</small>بابا! تدري وش صار اليوم في المدرسة؟</div>
+          <div class="notif anim d1"><span class="ap">و</span><div><b>قروب الشغل</b><small>١٢ رسالة جديدة · «الشباب، أحد شاف الملف؟»</small></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h2>ولدك يحكي لك عن يومه..<br>والجوال يرن.</h2>
+          <p class="s">كلنا نبغى نكون معهم. بس الجوال يعرف كيف يسحبنا، حتى وإحنا جالسين جنبهم.</p>
+        </div>
+      </div>
+      <div class="slide gut">
+        <div class="stage">
+          <div class="held anim"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M3 3l18 18"/></svg>١٢ رسالة تنتظرك بعد اللحظة</div>
+          <div class="pass anim d1"><span class="av">أ</span><div><b>الوالدة تتصل</b><small>المهمّين يوصلونك دايم</small></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h2>اختر لحظتك،<br>والباقي علينا.</h2>
+          <p class="s">وقت السفرة، أو المشوار، أو قبل النوم. نسكّت عنك كل شي إلا المهمّين، فما يفوتك شي مهم.</p>
+        </div>
+      </div>
+      <div class="slide gut">
+        <div class="stage">
+          <div class="bub dad anim"><small>قبل ما تنشغل</small>دقيقة يا بطل، مكالمة مهمة وأرجع لك على طول</div>
+          <div class="bub dad anim d2"><small>وأنت راجع له</small>ها يا بطل، وش صار بعدين؟ كمّل لي</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h2>وإذا اضطريت تنشغل..</h2>
+          <p class="s">نعطيك كلمة تقولها قبل، وكلمة ترجع فيها بعد. لأن اللي يبقى في بالهم مو إنك انشغلت.. إنك رجعت لهم.</p>
+        </div>
+      </div>
+      <div class="slide gut">
+        <div class="stage">
+          <div class="bigstat anim"><b>٤ س ٢٠ د</b><span>كنت معهم هالأسبوع</span></div>
+          <div class="minibars anim d1" aria-hidden="true"><i style="height:30%"></i><i style="height:55%"></i><i style="height:40%"></i><i style="height:70%"></i><i style="height:50%"></i><i style="height:85%"></i><i style="height:100%"></i></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h2>وتشوف الفرق بنفسك.</h2>
+          <p class="s">ملخص أسبوعي لك وحدك: كم كنت حاضر، ووش اللي يسحبك. بدون لوم، وبدون ما يشوفه أحد غيرك.</p>
+        </div>
+      </div>
+      <div class="slide gut">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h2>آخر شي..<br>مين اللي بتكون حاضر له؟</h2>
+          <p class="s">عشان نقترح عليك الكلمة بأسلوبك.</p>
+        </div>
+        <div class="gsel" role="group" aria-label="ولد أو بنت"><button type="button" data-g="b" aria-pressed="true">ولدي</button><button type="button" data-g="g" aria-pressed="false">بنتي</button></div>
+        <label class="namebox" for="nameIn"><span>يا</span><input id="nameIn" type="text" maxlength="16" placeholder="بطل" autocomplete="off"></label>
+        <div class="sugs" id="sugs"></div>
+        <p class="preview">بتسمع منك: <b id="prev"></b></p>
+      </div>
+    </div>
+    <div class="onb-foot gut">
+      <div class="dots" id="dots"></div>
+      <button class="next" type="button" id="next">التالي</button>
+    </div>
+  </div>
+</div>
+
+<!-- moment layer -->
+<div class="layer" id="layer" hidden dir="rtl" lang="ar">
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="layer-in">
+    <div class="ly-top"><span id="lyType">السفرة</span><span class="quiet"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M3 3l18 18"/></svg>ساكت إلا للمهمّين</span></div>
+    <h2 id="lyTitle">أنت معهم الحين</h2>
+    <div class="glow" id="glowBox"><div><div class="clock" id="clock">00:00</div><div class="ints" id="lyInts">بدون مقاطعة</div></div></div>
+    <div class="mode" id="mNormal">
+      <div class="ask"><small id="opLabel">تبغى تفتح سالفة؟</small><p id="opener"></p><button type="button" id="nextOpener">سؤال ثاني</button></div>
+      <div class="ly-actions">
+        <button class="btn-n o" type="button" id="mustReply">لازم أرد على شي</button>
+        <button class="btn-n" type="button" id="endBtn">خلصت اللحظة</button>
+        <button class="try" type="button" id="simulate">جرّب: كأنك طلعت للواتساب دقيقتين ورجعت</button>
+      </div>
+    </div>
+    <div class="mode" id="mAway" hidden>
+      <p class="away-note">اطلع رد على اللي يحتاجك. لما ترجع لهالصفحة، نعطيك كلمة ترجع فيها.</p>
+      <div class="ly-actions"><button class="btn-n o" type="button" id="awayBack">خلصت الرد</button></div>
+    </div>
+    <div class="mode" id="mBack" hidden>
+      <div class="say-n"><small id="bkLbl">ارجع له بهالكلمة</small><p id="bkP"></p><span class="why" id="bkW"></span><button type="button" id="bkN">كلمة ثانية</button></div>
+      <div class="bk-reason" id="bkReason" hidden></div>
+      <div class="ly-actions"><button class="btn-n gold" type="button" id="bkOk">رجعت له</button><button class="try" type="button" id="bkStill">لسا مشغول، أرجع بعدين</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" dir="rtl" lang="ar"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+document.documentElement.setAttribute('dir','rtl');document.documentElement.setAttribute('lang','ar');
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+function EN(){try{return S.lang==='en'}catch(e){return false}}
+const T=(a,e)=>EN()?e:a;
+const n=x=>new Intl.NumberFormat(EN()?'en-US':'ar-SA').format(x);
+const KEY='hader.v2';
+
+const MOMENTS={
+  meal:{label:'السفرة',hint:'غدا أو عشا',title:'السفرة لكم',icon:'<path d="M4 14h16a8 8 0 0 1-16 0z"/><path d="M12 6v3M9 7l1 2M15 7l-1 2"/>',
+    openers:['وش أكثر شي ضحّكك اليوم؟',['لو تختار غدا بكرة، وش تختار؟','لو تختارين غدا بكرة، وش تختارين؟'],['مين أطيب واحد معك في الفصل؟','مين أطيب وحدة معك في الفصل؟'],['وش تعلمت اليوم وما كنت تعرفه؟','وش تعلمتي اليوم وما كنتي تعرفينه؟']]},
+  ride:{label:'المشوار',hint:'من المدرسة وإليها',title:'المشوار لكم',icon:'<path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v2H3z"/><circle cx="7.5" cy="13" r=".8"/><circle cx="16.5" cy="13" r=".8"/>',
+    openers:['يومك من ١ إلى ١٠؟ وليش؟','وش أصعب شي صار اليوم؟','لو عندك قوة خارقة وحدة، وش تكون؟','مين جلس جنبك اليوم؟']},
+  bed:{label:'قبل النوم',hint:'آخر اليوم',title:'آخر اليوم لكم',icon:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+    openers:['وش أحلى لحظة في يومك؟',['فيه شي مضايقك وتبغى تقوله؟','فيه شي مضايقك وتبغين تقولينه؟'],['وش تبغى نسوي مع بعض بكرة؟','وش تبغين نسوي مع بعض بكرة؟'],['وش الشي اللي تحمد الله عليه اليوم؟','وش الشي اللي تحمدين الله عليه اليوم؟']]},
+  play:{label:'وقت معهم',hint:'لعب أو جلسة',title:'الوقت لكم',icon:'<circle cx="12" cy="12" r="8"/><path d="M12 4c2.5 2.5 2.5 13.5 0 16M4 12h16"/>',
+    openers:['علّمني لعبتك المفضلة',['وش الشي اللي تبغاني أشوفه؟','وش الشي اللي تبغيني أشوفه؟'],'لو نطلع الويكند، وين نروح؟',['مين أعز صديق عندك هالأيام؟','مين أعز صديقة عندك هالأيام؟']]}
+};
+/* Conversation bank: six kinds of question, each answering a gap the research names —
+   day: sharing daily experiences (dialogue becomes fragmented); feel: emotional responsiveness and feeling accepted;
+   people: quality of friendships over quantity (loneliness); digital: participatory accompaniment instead of bare restriction;
+   ideas: varied cognitive and language stimulation; us: the parent–child bond itself. */
+const Q={
+  day:{l:['عن يومه','عن يومها'],q:['وش أحلى شي صار لك اليوم؟','لو يومك فيلم، وش اسمه؟',['وش أصعب شي واجهته اليوم؟','وش أصعب شي واجهتيه اليوم؟'],['وش الشي اللي تعلمته اليوم وحسيت إنه جديد؟','وش الشي اللي تعلمتيه اليوم وحسيتي إنه جديد؟'],'يومك من ١ إلى ١٠؟ وليش هالرقم بالذات؟',['لو تقدر تعيد لحظة من اليوم، أي وحدة تختار؟','لو تقدرين تعيدين لحظة من اليوم، أي وحدة تختارين؟']]},
+  feel:{l:['عن مشاعره','عن مشاعرها'],q:['وش الشي اللي فرّحك اليوم؟',['فيه شي ضايقك اليوم وتبغى تحكيه لي؟','فيه شي ضايقك اليوم وتبغين تحكينه لي؟'],['متى آخر مرة حسيت إنك فخور بنفسك؟','متى آخر مرة حسيتي إنك فخورة بنفسك؟'],'لو مشاعرك اليوم لون، وش يكون؟',['وش الشي اللي يخليك تحس بالأمان؟','وش الشي اللي يخليك تحسين بالأمان؟'],'فيه شي شاغل بالك هالأيام؟']},
+  people:{l:['عن أصحابه','عن صاحباتها'],q:['مين أكثر أحد ضحّكك اليوم؟',['مين أقرب صديق لك الحين؟ وش يعجبك فيه؟','مين أقرب صديقة لك الحين؟ وش يعجبك فيها؟'],['فيه أحد في الفصل تحس إنه وحيد؟','فيه أحد في الفصل تحسين إنها وحيدة؟'],['لو تقدر تساعد أحد بكرة، مين يكون؟','لو تقدرين تساعدين أحد بكرة، مين يكون؟'],['وش أحلى شي سويته مع أصحابك هالأسبوع؟','وش أحلى شي سويتيه مع صاحباتك هالأسبوع؟'],['مين المعلم اللي تحب حصته؟ وليش؟','مين المعلمة اللي تحبين حصتها؟ وليش؟']]},
+  digital:{l:['عن عالمه في الجوال','عن عالمها في الجوال'],q:[['وش أحلى مقطع شفته هالأسبوع؟ وريني إياه بعدين','وش أحلى مقطع شفتيه هالأسبوع؟ وريني إياه بعدين'],['وش اللعبة اللي تحبها هالأيام؟ وش يعجبك فيها؟','وش اللعبة اللي تحبينها هالأيام؟ وش يعجبك فيها؟'],['فيه شي شفته في النت وما فهمته أو ضايقك؟','فيه شي شفتيه في النت وما فهمتيه أو ضايقك؟'],['لو تعلّمني شي في الجوال، وش تعلّمني؟','لو تعلّميني شي في الجوال، وش تعلّميني؟'],['مين اللي تتابعه في يوتيوب؟ وش يعجبك فيه؟','مين اللي تتابعينه في يوتيوب؟ وش يعجبك فيه؟'],['تحس إن الجوال ياخذ من وقتك أكثر من اللازم؟','تحسين إن الجوال ياخذ من وقتك أكثر من اللازم؟']]},
+  ideas:{l:['عن أحلامه','عن أحلامها'],q:[['لو عندك قوة خارقة وحدة، وش تختار؟','لو عندك قوة خارقة وحدة، وش تختارين؟'],['وش تبغى تصير لما تكبر؟ وليش؟','وش تبغين تصيرين لما تكبرين؟ وليش؟'],['لو تخترع شي يسهّل حياة الناس، وش يكون؟','لو تخترعين شي يسهّل حياة الناس، وش يكون؟'],['لو تقدر تسافر لأي مكان، وين تروح؟','لو تقدرين تسافرين لأي مكان، وين تروحين؟'],['لو أنت المعلم بكرة، وش تعلّم الفصل؟','لو أنتي المعلمة بكرة، وش تعلّمين الفصل؟'],'وش السؤال اللي ودك تعرف جوابه؟']},
+  us:{l:['عنكم أنتم','عنكم أنتم'],q:[['وش الشي اللي تحب نسويه أنا وأنت؟','وش الشي اللي تحبين نسويه أنا وأنتي؟'],'وش أحلى ذكرى عندك معي؟','لو نسوي طلعة الويكند، وين نروح؟',['وش الشي اللي تحب تتعلمه مني؟','وش الشي اللي تحبين تتعلمينه مني؟'],['على وش تحمد الله اليوم؟','على وش تحمدين الله اليوم؟'],['وش الشي اللي تبغاني أعرفه عنك وما أدري عنه؟','وش الشي اللي تبغيني أعرفه عنك وما أدري عنه؟']]}
+};
+/* More questions, rooted in Saudi family life: جمعة العائلة، بيت الجد، رمضان والعيد، الكشتة، الحي، الأخوان */
+const MORE={
+  day:[['وش أكثر حصة استانست فيها اليوم؟','وش أكثر حصة استانستي فيها اليوم؟'],'مين سلّم عليك أول ما وصلت المدرسة؟',['وش أكلت في الفسحة؟ وكان زين؟','وش أكلتي في الفسحة؟ وكان زين؟'],['لو تعطي يومك عنوان خبر، وش تكتب؟','لو تعطين يومك عنوان خبر، وش تكتبين؟']],
+  feel:[['وش أكثر شي يرفع معنوياتك لما تكون زعلان؟','وش أكثر شي يرفع معنوياتك لما تكونين زعلانة؟'],['متى آخر مرة ضحكت من قلب؟','متى آخر مرة ضحكتي من قلب؟'],['وش الشي اللي تخاف منه شوي؟','وش الشي اللي تخافين منه شوي؟'],['لو أحد من أصحابك زعلان، كيف تواسيه؟','لو وحدة من صاحباتك زعلانة، كيف تواسينها؟']],
+  people:[['مين أكثر أحد تحب تجلس معه في جمعة العائلة؟','مين أكثر أحد تحبين تجلسين معه في جمعة العائلة؟'],'وش أحلى شي يسويه جدك أو جدتك؟',['لو نعزم أحد على العشا، مين تختار؟','لو نعزم أحد على العشا، مين تختارين؟'],['وش أكثر شي تحبه في أخوانك؟','وش أكثر شي تحبينه في أخوانك؟']],
+  digital:[['لو تصمم لعبة، وش تكون فكرتها؟','لو تصممين لعبة، وش تكون فكرتها؟'],['وش أكثر تطبيق تحس إنه مفيد لك؟','وش أكثر تطبيق تحسين إنه مفيد لك؟'],['فيه أحد كلمك في لعبة أو تطبيق وأنت ما تعرفه؟','فيه أحد كلمك في لعبة أو تطبيق وأنتي ما تعرفينه؟'],['لو نحط قانون للجوالات في البيت، وش تقترح؟','لو نحط قانون للجوالات في البيت، وش تقترحين؟']],
+  ideas:[['لو صرت مدير المدرسة يوم واحد، وش أول شي تغيّره؟','لو صرتي مديرة المدرسة يوم واحد، وش أول شي تغيّرينه؟'],['لو تقدر تخدم الحي بشي، وش تسوي؟','لو تقدرين تخدمين الحي بشي، وش تسوين؟'],['وش المشروع اللي ودك تسويه وتكسب منه؟','وش المشروع اللي ودك تسوينه وتكسبين منه؟'],['لو تكتب كتاب، وش يكون عنوانه؟','لو تكتبين كتاب، وش يكون عنوانه؟']],
+  us:[['وش أكثر شي تحبه في رمضان؟','وش أكثر شي تحبينه في رمضان؟'],['وش أحلى عيد تتذكره؟ وليش؟','وش أحلى عيد تتذكرينه؟ وليش؟'],'لو نطلع كشتة، وش لازم ناخذ معنا؟',['وش القصة اللي تحب أحكيها لك من صغري؟','وش القصة اللي تحبين أحكيها لك من صغري؟'],'وش أكثر شي يعجبك في بيت جدك؟',['وش الشي اللي تبغانا نسويه كل جمعة؟','وش الشي اللي تبغينا نسويه كل جمعة؟']]
+};
+Object.entries(MORE).forEach(([c,a])=>Q[c].q.push(...a));
+const ORDER={meal:['day','people','ideas','us','digital','feel'],ride:['day','people','feel','digital','ideas','us'],bed:['feel','us','day','ideas','people','digital'],play:['ideas','us','digital','people','day','feel']};
+const REASONS={work:'الشغل',family:'الأهل',fun:'ترفيه',urgent:'طارئ'};
+/* Each line follows what the research found: name the reason and the time (so it reads as necessity, not rejection),
+   tell the child their words matter (warmth), hold the thread of the talk, then return to it, thank them, and put the phone away in front of them (modelling). */
+const BEFORE=[
+  {b:'يا {n}، عندي {why}. {t} وأرجع لك وأسمعك للآخر',g:'يا {n}، عندي {why}. {t} وأرجع لك وأسمعك للآخر',why:'تسمية السبب والمدة تخلي الانشغال مفهوم، مو تجاهل.'},
+  {b:'اللي تقوله يهمني يا {n}. خلني أخلص {why} في {t}، وبعدها كلي لك',g:'اللي تقولينه يهمني يا {n}. خليني أخلص {why} في {t}، وبعدها كلي لك',why:'إحساس الطفل إن كلامه مهم هو أكثر شي يحميه من الشعور بالرفض.'},
+  {b:'احفظ لي وين وصلت يا {n}، أبي أعرف وش صار بعدها. {t} وأرجع لك',g:'احفظي لي وين وصلتي يا {n}، أبي أعرف وش صار بعدها. {t} وأرجع لك',why:'مسك خيط السالفة يرجّع الحوار بدل ما ينقطع.'}];
+const AFTER=[
+  {b:'رجعت لك يا {n}. وين وقفنا؟ كمّل، أنا كلي لك الحين',g:'رجعت لك يا {n}. وين وقفنا؟ كمّلي، أنا كلي لك الحين',why:'الرجوع لنفس الموضوع دليل إنك كنت تسمع.'},
+  {b:'شكرًا إنك صبرت عليّ يا {n}. وش صار بعدين؟',g:'شكرًا إنك صبرتي عليّ يا {n}. وش صار بعدين؟',why:'تقدير الانتظار يوصل إن اللحظة معهم أولوية.'},
+  {b:'سامحني يا {n} إني طوّلت. يلا، الجوال بعيد، كمّل لي',g:'سامحيني يا {n} إني طوّلت. يلا، الجوال بعيد، كمّلي لي',why:'الاعتذار وإبعاد الجوال قدامهم قدوة تُشاف، مو بس تنقال.'}];
+
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&Array.isArray(v.sessions))return v}catch(e){}return null}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function sampleData(){
+  const out=[];let seed=11;const r=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+  const plan=[[0,'meal',13.75,38],[1,'ride',12.5,22],[1,'bed',21,18],[2,'meal',14,41],[3,'play',17,35],[4,'ride',12.5,20],[5,'meal',13.5,44],[5,'bed',21.25,15],[6,'meal',14,30]];
+  const pool=['work','work','work','family','fun','work','urgent','fun'];
+  plan.forEach(([d,type,h,m],i)=>{const day=new Date();day.setHours(0,0,0,0);day.setDate(day.getDate()-d);
+    const start=day.getTime()+h*3600000,end=start+m*60000,k=Math.floor(r()*3.2),ints=[];
+    for(let j=0;j<k;j++){const s=start+(j+1)*m/(k+1)*60000,dur=(1+Math.floor(r()*4))*60000;ints.push({start:s,end:s+dur,reason:pool[Math.floor(r()*pool.length)],announced:r()>.45,returned:r()>.2})}
+    out.push({id:'s'+i,type,start,end,ints})});
+  return out}
+let S=load()||{name:'',sessions:sampleData(),sample:true,onboarded:false};
+
+const isG=()=>S.gender==='g', G=(b,g)=>isG()?g:b;
+const kid=()=>(S.name||'').trim()||(EN()?G('champ','sweetie'):G('بطل','حبيبتي'));
+const TWORD={1:'دقيقة',2:'دقيقتين',5:'خمس دقايق'};
+const WHY={work:'شغلة ضرورية من الدوام',family:'مكالمة من الأهل',fun:'شي بسيط',urgent:'شي ضروري'};
+const TWORD_EN={1:'one minute',2:'two minutes',5:'five minutes'},WHY_EN={work:'an urgent work thing',family:'a call from family',fun:'something quick',urgent:'something urgent'};
+const fill=(p,o={})=>(EN()?p.e:G(p.b,p.g)).replace(/\{n\}/g,kid()).replace(/\{t\}/g,(EN()?TWORD_EN:TWORD)[o.t||2]).replace(/\{why\}/g,(EN()?WHY_EN:WHY)[o.r||'work']);
+const whyOf=p=>EN()?p.we:p.why;
+const ot=x=>Array.isArray(x)?G(x[0],x[1]):x;
+function unit(v,one,two,few,many){return v===1?one:v===2?two:(v<=10?n(v)+' '+few:n(v)+' '+many)}
+function fmtMin(ms){const m=Math.round(ms/60000);if(EN())return m<1?'under a minute':m===1?'1 minute':m+' minutes';if(m<1)return 'أقل من دقيقة';return unit(m,'دقيقة','دقيقتين','دقائق','دقيقة')}
+function fmtLong(mins){if(EN()){if(mins<60)return mins+' min';return Math.floor(mins/60)+'h '+(mins%60?mins%60+'m':'')}if(mins<60)return mins?unit(mins,'دقيقة','دقيقتين','دقائق','دقيقة'):'٠ دقيقة';const h=Math.floor(mins/60),m=mins%60;
+  return unit(h,'ساعة','ساعتين','ساعات','ساعة')+(m?' و'+unit(m,'دقيقة','دقيقتين','دقائق','دقيقة'):'')}
+function clock(ms){const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60,p=v=>String(v).padStart(2,'0');return (h?h+':':'')+p(m)+':'+p(x)}
+function pick(a,avoid){let v;do{v=a[Math.floor(Math.random()*a.length)]}while(a.length>1&&v===avoid);return v}
+function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2200)}
+function presentMs(s){return Math.max(0,s.end-s.start-s.ints.reduce((a,i)=>a+Math.max(0,i.end-i.start),0))}
+function weekSessions(){const f=new Date();f.setHours(0,0,0,0);f.setDate(f.getDate()-6);return S.sessions.filter(s=>s.start>=f.getTime())}
+
+/* ---------- onboarding ---------- */
+const deck=$('#deck'), slides=$$('#deck .slide'); let idx=0;
+$('#dots').innerHTML=slides.map(()=>'<i></i>').join('');
+function setIdx(i){idx=i;slides.forEach((s,j)=>s.classList.toggle('on',j===i));$$('#dots i').forEach((d,j)=>d.classList.toggle('on',j===i));
+  $('#next').textContent=i===slides.length-1?'يلا نبدأ':'التالي';$('#skip').style.visibility=i===slides.length-1?'hidden':'visible'}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.6)setIdx(slides.indexOf(e.target))}),{root:deck,threshold:[.6]});
+slides.forEach(s=>io.observe(s));
+function goSlide(i){slides[i].scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',inline:'start',block:'nearest'})}
+let og='b';
+function setG(v){og=v;$$('.gsel [data-g]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.g===v));
+  const s=v==='g'?['حبيبتي','عمري','بنتي','أميرتي']:['بطل','حبيبي','عمري','ولدي'];
+  $('#sugs').innerHTML=s.map(x=>`<button type="button" class="sug">${x}</button>`).join('');
+  $$('#sugs .sug').forEach(b=>b.onclick=()=>{$('#nameIn').value=b.textContent;updPrev()});
+  $('#nameIn').placeholder=EN()?(v==='g'?'sweetie':'champ'):s[0];updPrev();xl(document.body)}
+$$('.gsel [data-g]').forEach(b=>b.onclick=()=>setG(b.dataset.g));
+function openOnb(){$('#onb').hidden=false;document.body.style.overflow='hidden';$('#nameIn').value=S.name||'';setG(S.gender||'b');requestAnimationFrame(()=>{deck.scrollLeft=0;slides[0].scrollIntoView({inline:'start',block:'nearest'});setIdx(0)})}
+function closeOnb(){S.onboarded=true;save();$('#onb').hidden=true;document.body.style.overflow='';renderHome()}
+$('#next').onclick=()=>{if(idx<slides.length-1)goSlide(idx+1);else{S.name=$('#nameIn').value.trim();S.gender=og;closeOnb()}};
+$('#skip').onclick=()=>goSlide(slides.length-1);
+function updPrev(){if(EN()){const nm=($('#nameIn').value||'').trim()||(og==='g'?'sweetie':'champ');$('#prev').textContent='“'+BEFORE[0].e.replace('{n}',nm).replace('{why}',WHY_EN.work).replace('{t}',TWORD_EN[2])+'”';return}const nm=($('#nameIn').value||'').trim()||(og==='g'?'حبيبتي':'بطل');
+  $('#prev').textContent='«'+(og==='g'?BEFORE[0].g:BEFORE[0].b).replace('{n}',nm).replace('{why}',WHY.work).replace('{t}',TWORD[2])+'»'}
+$('#nameIn').addEventListener('input',updPrev);
+$('#nameIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#next').click()}});
+$('#helpBtn').onclick=openOnb;
+
+/* ---------- tabs ---------- */
+function go(t){$$('.tabs [data-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));
+  ['home','week','people'].forEach(v=>$('#v-'+v).hidden=v!==t);if(t==='week')renderWeek();window.scrollTo(0,0)}
+$$('.tabs [data-tab]').forEach(b=>b.onclick=()=>go(b.dataset.tab));
+$$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+/* ---------- home ---------- */
+let chosen=(()=>{const h=new Date().getHours();return h>=20?'bed':h>=12&&h<15?'meal':h>=15&&h<19?'play':'ride'})();
+function renderPicker(){$('#picker').innerHTML=Object.entries(MOMENTS).map(([k,m])=>
+  `<button type="button" class="opt" data-m="${k}" aria-pressed="${k===chosen}"><svg viewBox="0 0 24 24" aria-hidden="true">${m.icon}</svg><span><strong>${m.label}</strong><small>${m.hint}</small></span></button>`).join('');
+  $$('#picker .opt').forEach(b=>b.onclick=()=>{chosen=b.dataset.m;renderPicker()})}
+function renderHome(){
+  const h=new Date().getHours();$('#greet').textContent=h<12?'صباح الخير':'مساء الخير';
+  $('#greet').textContent=EN()?(h<12?'Good morning':'Good evening'):(h<12?'صباح الخير':'مساء الخير');
+  $('#greetSub').textContent=EN()?(S.name?`What's your next moment with ${S.name}?`:"What's your next moment with your kids?"):(S.name?`وش اللحظة الجاية مع ${S.name}؟`:'وش اللحظة الجاية مع عيالك؟');
+  renderPicker();
+  const w=weekSessions(),mins=Math.round(w.reduce((a,s)=>a+presentMs(s),0)/60000);
+  const arc=Math.min(1,mins/300)*157;$('#ringArc').setAttribute('stroke-dasharray',arc+' 157');
+  $('#glanceText').innerHTML=EN()?(w.length?`You were with them <b>${fmtLong(mins)}</b> this week${S.sample?' (sample)':''}.`:'Start your first moment and your week will show here.'):(w.length?`كنت معهم <b>${fmtLong(mins)}</b> هالأسبوع${S.sample?' (مثال)':''}.`:'ابدأ أول لحظة، وهنا بتشوف أسبوعك.');
+}
+renderHome();
+
+/* ---------- week ---------- */
+function renderWeek(){
+  const w=weekSessions(),ints=w.flatMap(s=>s.ints),mins=Math.round(w.reduce((a,s)=>a+presentMs(s),0)/60000);
+  $('#weekBig').innerHTML=`<span>${fmtLong(mins)}</span>`;$('#sampleNote').hidden=!S.sample;$('#clearSample').hidden=!S.sample;
+  const days=[];for(let d=6;d>=0;d--){const a=new Date();a.setHours(0,0,0,0);a.setDate(a.getDate()-d);const b=a.getTime()+864e5;
+    days.push({d,m:Math.round(S.sessions.filter(s=>s.start>=a.getTime()&&s.start<b).reduce((x,s)=>x+presentMs(s),0)/60000),l:d===0?T('اليوم','Today'):a.toLocaleDateString(EN()?'en-US':'ar-SA',{weekday:'short'})})}
+  const max=Math.max(30,...days.map(x=>x.m));
+  $('#days').innerHTML=days.map(x=>`<div class="day${x.d===0?' today':''}"><em>${x.m?n(x.m):''}</em><div class="bar${x.m?'':' zero'}" style="height:${x.m?Math.max(6,x.m/max*100):4}px"></div><small>${x.l}</small></div>`).join('');
+  const c={};Object.keys(REASONS).forEach(k=>c[k]=0);ints.forEach(i=>c[i.reason]++);const top=Math.max(1,...Object.values(c));
+  $('#pulls').innerHTML=Object.entries(REASONS).map(([k,l])=>`<div class="pull"><span>${l}</span><div class="t"><i style="width:${c[k]/top*100}%"></i></div><b>${n(c[k])}</b></div>`).join('');
+  const TH=[];const REASONS_EN={work:'work',family:'family',fun:'fun',urgent:'something urgent'};
+  if(ints.length){const [k,v]=Object.entries(c).sort((a,b)=>b[1]-a[1])[0],pct=Math.round(v/ints.length*100);
+    TH.push(k==='work'?{t:EN()?`${pct}% of what pulled you away was work. A kind reply in the group covers most of it.`:`${n(pct)}٪ من اللي سحبك كان شغل. ردّ لطيف في القروب يكفيك أغلبها.`,w:false}:{t:EN()?`What pulled you most: ${REASONS_EN[k]}.`:`أكثر شي سحبك: ${REASONS[k]}.`});
+    const ret=Math.round(ints.filter(i=>i.returned).length/ints.length*100);
+    TH.push({t:EN()?`You came back to them after ${ret}% of the times you stepped away. That's what stays with them.`:`رجعت لهم بعد ${n(ret)}٪ من المرات اللي انشغلت فيها. هذا اللي يبقى في بالهم.`,w:true});
+    const ann=Math.round(ints.filter(i=>i.announced).length/ints.length*100);
+    TH.push({t:EN()?`${ann}% of the time you told them before stepping away. A kind word makes a difference.`:`في ${n(ann)}٪ من المرات قلت لهم قبل ما تنشغل. الكلمة اللطيفة تفرق.`});
+  }else TH.push({t:EN()?(w.length?'Not one interruption this week. May God keep them for you.':"Start your first moment and we'll show you what pulls you away."):(w.length?'ولا مقاطعة هالأسبوع. الله يحفظهم لك.':'ابدأ أول لحظة، وهنا بنقول لك وش اللي يسحبك.'),w:true});
+  $('#thoughts').innerHTML=TH.map(x=>`<div class="thought${x.w?' warm':''}">${x.t}</div>`).join('');
+}
+$('#clearSample').onclick=()=>{S.sessions=[];S.sample=false;save();renderWeek();renderHome();toast('انمسحت الأرقام التوضيحية')};
+
+/* ---------- people ---------- */
+const sel=$('#backAt');for(let h=13;h<=23;h++){const o=document.createElement('option');o.value=h;o.textContent=EN()?(h-12)+' pm':n(h>12?h-12:h)+(h<17?' العصر':' بالليل');if(h===20)o.selected=true;sel.appendChild(o)}
+function renderReplies(){const t=sel.options[sel.selectedIndex].textContent;
+  const m=EN()?[`With the kids right now. I'll reply at ${t}.`,"Family lunch time. If it's urgent, call and I'll pick up.",`I'm with my children now. Back to you at ${t}. If it's urgent, call twice.`]:[`مع العيال الحين، أرد عليك الساعة ${t} إن شاء الله.`,'وقت الغدا مع الأهل، إذا الموضوع ضروري اتصل وأرد.',`معي أولادي الحين. أرجع لك الساعة ${t}، وإذا مستعجل اتصل مرتين.`];
+  $('#replies').innerHTML=m.map((x,i)=>`<div class="reply"><p id="rp${i}">${x}</p><button type="button" class="copy" data-c="rp${i}">نسخ</button></div>`).join('');
+  $$('#replies .copy').forEach(b=>b.onclick=()=>copy(b))}
+sel.onchange=renderReplies;renderReplies();
+function copy(b){const el=$('#'+b.dataset.c);const ok=()=>{b.textContent='تم';b.classList.add('done');setTimeout(()=>{b.textContent='نسخ';b.classList.remove('done')},1500)};
+  const fb=()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('حددنا النص، انسخه')};
+  try{navigator.clipboard.writeText(el.textContent).then(ok,fb)}catch(e){fb()}}
+$$('.os [data-os]').forEach(b=>b.onclick=()=>{$$('.os [data-os]').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#os-ios').hidden=b.dataset.os!=='ios';$('#os-android').hidden=b.dataset.os!=='android'});
+
+/* ---------- moment ---------- */
+let cur=null,tick=null,hiddenAt=null,brk=null,wake=null,op='';
+async function lock(){try{wake=await navigator.wakeLock?.request('screen')}catch(e){wake=null}}
+function updInts(){const k=cur?cur.ints.length:0;$('#lyInts').textContent=EN()?(k?(k===1?'Stepped away once':k===2?'Stepped away twice':'Stepped away '+k+' times'):'No interruptions'):(k?(k===1?'انشغلت مرة':k===2?'انشغلت مرتين':'انشغلت '+n(k)+' مرات'):'بدون مقاطعة')}
+$('#startBtn').onclick=()=>{
+  if(S.sample){S.sessions=[];S.sample=false}
+  cur={id:'r'+Date.now(),type:chosen,start:Date.now(),ints:[]};const m=MOMENTS[chosen];
+  $('#lyType').textContent=m.label;$('#lyTitle').textContent=m.title;queue=buildQueue(chosen);showQ();updInts();
+  $('#clock').textContent='00:00';$('#layer').hidden=false;document.body.style.overflow='hidden';
+  const hr=new Date().getHours(),scene=(chosen==='bed'||hr>=18||hr<5)?'night':hr>=15?'dusk':'day';
+  $('#layer').dataset.scene=scene;startSky(scene);try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}
+  mode='normal';back=null;setMode('normal');
+  tick=setInterval(()=>{if(mode==='normal')$('#clock').textContent=clock(Date.now()-cur.start)},1000);lock()};
+/* sky: twinkling stars and a crescent at night, early stars and a setting sun at dusk, soft light motes by day */
+let skyRAF=null;
+function startSky(scene){
+  const c=$('#sky'),ctx=c.getContext('2d'),dpr=Math.min(2,window.devicePixelRatio||1);
+  let w,h;const size=()=>{w=c.clientWidth;h=c.clientHeight;c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)};size();
+  const N=scene==='night'?150:scene==='dusk'?40:28,still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pts=Array.from({length:N},()=>({x:Math.random(),y:scene==='day'?Math.random():Math.random()*(scene==='night'?.8:.45),
+    r:scene==='day'?1+Math.random()*2.2:.4+Math.random()*1.3,ph:Math.random()*6.28,sp:.6+Math.random()*1.6,v:.02+Math.random()*.05}));
+  cancelAnimationFrame(skyRAF);window.onresize=size;
+  const frame=t=>{ctx.clearRect(0,0,w,h);const s=t/1000;
+    if(scene==='day'){const g=ctx.createRadialGradient(w*.82,h*.04,0,w*.82,h*.04,w*.8);g.addColorStop(0,'rgba(255,232,180,.28)');g.addColorStop(1,'rgba(255,232,180,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h)}
+    if(scene==='dusk'){const g=ctx.createRadialGradient(w*.5,h*1.02,0,w*.5,h*1.02,w*.9);g.addColorStop(0,'rgba(255,170,100,.55)');g.addColorStop(.35,'rgba(240,140,90,.18)');g.addColorStop(1,'rgba(240,140,90,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h)}
+    pts.forEach(p=>{let a;
+      if(scene==='day'){p.y-=still?0:p.v/600;if(p.y<-.02)p.y=1.02;a=.10+.08*Math.sin(s*p.sp+p.ph)}
+      else a=.35+.55*(still?.6:(.5+.5*Math.sin(s*p.sp+p.ph)));
+      ctx.beginPath();ctx.arc(p.x*w,p.y*h,p.r,0,6.283);ctx.fillStyle=`rgba(255,248,230,${a.toFixed(3)})`;ctx.fill()});
+    if(scene==='night'){const mx=w*.2,my=h*.11,mr=17;ctx.save();ctx.shadowColor='rgba(255,236,190,.55)';ctx.shadowBlur=24;
+      ctx.beginPath();ctx.arc(mx,my,mr,0,6.283);ctx.fillStyle='#F5ECD2';ctx.fill();ctx.restore();
+      ctx.save();ctx.globalCompositeOperation='destination-out';ctx.beginPath();ctx.arc(mx+8,my-5,mr,0,6.283);ctx.fill();ctx.restore()}
+    if(!still)skyRAF=requestAnimationFrame(frame)};
+  skyRAF=requestAnimationFrame(frame)}
+function stopSky(){cancelAnimationFrame(skyRAF);window.onresize=null}
+let queue=[];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function buildQueue(type){const seen=S.seen||[];
+  const lists=ORDER[type].map(c=>shuffle(Q[c].q.map((x,i)=>({c,id:c+i,x}))).sort((a,b)=>seen.includes(a.id)-seen.includes(b.id)));
+  const out=[];for(let r=0;r<14;r++)lists.forEach(l=>{if(l[r])out.push(l[r])});return out}
+function showQ(){if(!queue.length)queue=buildQueue(cur.type);const it=queue.shift();
+  S.seen=[...(S.seen||[]).filter(x=>x!==it.id),it.id].slice(-30);save();
+  lastQ=it;paintQ()}
+let lastQ=null;
+function paintQ(){const it=lastQ;if(!it)return;const i=+it.id.slice(it.c.length);
+  $('#opLabel').textContent=EN()?'Want to start a chat? · '+QL_EN[it.c]:'تبغى تفتح سالفة؟ · '+G(Q[it.c].l[0],Q[it.c].l[1]);
+  $('#opener').textContent=EN()?QEN[it.c][i]:ot(it.x)}
+$('#nextOpener').onclick=showQ;
+/* the moment screen changes in place: normal → away (you're replying) → back (the way back to the child) → normal */
+let mode='normal';
+function setMode(m){mode=m;$('#mNormal').hidden=m!=='normal';$('#mAway').hidden=m!=='away';$('#mBack').hidden=m!=='back';
+  const g=$('#glowBox');g.classList.remove('swap');void g.offsetWidth;g.classList.add('swap');
+  if(m==='normal'){$('#lyTitle').textContent=MOMENTS[cur.type].title;$('#clock').textContent=clock(Date.now()-cur.start);updInts()}}
+document.addEventListener('visibilitychange',()=>{if(!cur)return;
+  if(document.hidden){hiddenAt=Date.now();return}
+  if(!wake||wake.released)lock();
+  if(hiddenAt){const at=hiddenAt,d=Date.now()-at;hiddenAt=null;if(mode==='back')return;
+    if(brk)backMode({start:brk.start,end:Date.now(),reason:brk.reason,announced:true});
+    else if(d>=5000)backMode({start:at,end:Date.now(),reason:null,announced:false})}});
+$('#simulate').onclick=()=>{const e=Date.now();backMode({start:e-128000,end:e,reason:null,announced:false})};
+
+function sheet(html,locked){const s=$('#sheet');s.innerHTML=html;s.dataset.lock=locked?'1':'';s.hidden=false;$('#scrim').hidden=false;s.scrollTop=0}
+function closeSheet(){$('#sheet').hidden=true;$('#scrim').hidden=true}
+$('#scrim').onclick=()=>{if(!$('#sheet').dataset.lock)closeSheet()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden&&!$('#sheet').dataset.lock)closeSheet()});
+function chips(name,opts,sel){return `<div class="chips" role="group">${opts.map(([k,l])=>`<button type="button" class="chip" data-${name}="${k}" aria-pressed="${k===sel}">${l}</button>`).join('')}</div>`}
+function bind(name,cb){$$(`#sheet [data-${name}]`).forEach(b=>b.onclick=()=>{$$(`#sheet [data-${name}]`).forEach(x=>x.setAttribute('aria-pressed',x===b));cb(b.dataset[name])})}
+
+$('#mustReply').onclick=()=>{
+  let reason='work',mins=2,ph=pick(BEFORE);
+  const upd=()=>{$('#bp').textContent=fill(ph,{t:mins,r:reason});$('#bw').textContent=whyOf(ph)};
+  sheet(`<h3>${G('قبل ما تنشغل، قل له:','قبل ما تنشغل، قل لها:')}</h3>
+    <div class="say"><p id="bp"></p><span class="why" id="bw"></span><button type="button" id="bpN">كلمة ثانية</button></div>
+    <p class="q">وش اللي يحتاجك؟</p>${chips('r',Object.entries(REASONS),reason)}
+    <p class="q">كم تحتاج؟</p>${chips('t',[['1','دقيقة'],['2','دقيقتين'],['5','٥ دقائق']],'2')}
+    <button class="cta" type="button" id="goBrk">قلتها، بروح أرد</button>
+    <button class="cta2" type="button" id="noBrk">خلاص، ما راح أرد</button>`);
+  upd();bind('r',v=>{reason=v;upd()});bind('t',v=>{mins=+v;upd()});
+  $('#bpN').onclick=()=>{ph=pick(BEFORE,ph);upd()};
+  $('#noBrk').onclick=()=>{closeSheet();toast('كفو، كمّل معهم')};
+  $('#goBrk').onclick=()=>{brk={start:Date.now(),reason,planned:mins*60000};closeSheet();
+    setMode('away');$('#lyTitle').textContent='رد براحتك';$('#clock').textContent=clock(brk.planned);$('#lyInts').textContent='باقي على الرجعة';
+    brk.tm=setInterval(()=>{if(!brk)return;const left=brk.planned-(Date.now()-brk.start);
+      $('#clock').textContent=clock(Math.max(0,left));if(left<=0)$('#lyInts').textContent='خلص الوقت';
+      if(left<=0&&!brk.bz){brk.bz=1;try{navigator.vibrate&&navigator.vibrate([200,120,200])}catch(e){}if(!document.hidden)backMode({start:brk.start,end:Date.now(),reason:brk.reason,announced:true,up:true})}},500)};
+};
+$('#awayBack').onclick=()=>{if(brk)backMode({start:brk.start,end:Date.now(),reason:brk.reason,announced:true})};
+let back=null;
+function backMode(it){
+  if(brk){clearInterval(brk.tm);brk=null}
+  back={it,reason:it.reason,ph:pick(AFTER)};
+  $('#lyTitle').textContent=it.up?G('خلص الوقت، ارجع له','خلص الوقت، ارجع لها'):'هلا فيك، رجعت';
+  $('#clock').textContent=clock(it.end-it.start);$('#lyInts').textContent=EN()?'Away for '+fmtMin(it.end-it.start)+'. That\'s okay':'انشغلت '+fmtMin(it.end-it.start)+'. عادي';
+  $('#bkLbl').textContent=G('ارجع له بهالكلمة','ارجع لها بهالكلمة');$('#bkOk').textContent=G('رجعت له','رجعت لها');
+  const upd=()=>{$('#bkP').textContent=fill(back.ph);$('#bkW').textContent=whyOf(back.ph)};upd();
+  $('#bkN').onclick=()=>{back.ph=pick(AFTER,back.ph);upd()};
+  const rs=$('#bkReason');rs.hidden=!!it.reason;
+  rs.innerHTML=it.reason?'':`<small>وش اللي سحبك؟ يبقى عندك بس</small><div class="chips" role="group">${Object.entries(REASONS).map(([k,l])=>`<button type="button" class="chip" data-br="${k}" aria-pressed="false">${l}</button>`).join('')}</div>`;
+  $$('#bkReason [data-br]').forEach(b=>b.onclick=()=>{$$('#bkReason [data-br]').forEach(x=>x.setAttribute('aria-pressed',x===b));back.reason=b.dataset.br});
+  setMode('back');
+}
+function finishBack(ret){if(!back||!cur)return;const it=back.it;
+  cur.ints.push({start:it.start,end:it.end,reason:back.reason||'work',announced:it.announced,returned:ret});back=null;setMode('normal');
+  if(ret)toast('كفو، أنت معهم')}
+$('#bkOk').onclick=()=>finishBack(true);$('#bkStill').onclick=()=>finishBack(false);
+$('#endBtn').onclick=()=>{if(!cur)return;if(brk){clearInterval(brk.tm);brk=null}back=null;cur.end=Date.now();clearInterval(tick);try{wake&&wake.release()}catch(e){}wake=null;
+  const s=cur;cur=null;S.sessions.push(s);save();stopSky();$('#layer').hidden=true;document.body.style.overflow='';
+  const pm=Math.max(1,Math.round(presentMs(s)/60000)),k=s.ints.length,b=s.ints.filter(i=>i.returned).length;
+  sheet(`<h3>الله يحفظهم لك</h3>
+    <div class="endstats"><div><b>${n(pm)}</b><span>${T('دقيقة معهم','minutes with them')}</span></div><div><b>${n(k)}</b><span>${T('انشغلت','stepped away')}</span></div><div><b>${n(b)}</b><span>${T('رجعت لهم','came back')}</span></div></div>
+    <p class="muted">${k===0?'لحظة كاملة بدون مقاطعة. هذي اللي تبقى في بالهم.':b===k?'انشغلت، بس رجعت لهم كل مرة. وهذا اللي يفرق.':'كل لحظة تحسب. المرة الجاية، خل الرجعة أسرع.'}</p>
+    <button class="cta" type="button" id="okEnd">تم</button>`);
+  $('#okEnd').onclick=closeSheet;renderHome()};
+
+
+/* ---------- English ---------- */
+[["Hey {n}, I have {why}. Give me {t} and I'll be back to hear you out","Naming the reason and the time makes it understood, not ignoring."],
+ ["What you're saying matters to me, {n}. Let me finish {why} in {t}, then I'm all yours","Feeling that their words matter is what best protects a child from feeling rejected."],
+ ["Hold that thought, {n}, I want to know what happened next. Give me {t} and I'll be back","Holding the thread brings the conversation back instead of letting it drop."]].forEach((x,i)=>{BEFORE[i].e=x[0];BEFORE[i].we=x[1]});
+[["I'm back, {n}. Where were we? Go on, I'm all yours now","Returning to the same topic shows you were listening."],
+ ["Thank you for waiting for me, {n}. What happened next?","Thanking them for waiting shows the moment with them comes first."],
+ ["Sorry I took so long, {n}. There, the phone's away. Tell me more","Apologizing and putting the phone away in front of them is a model they can see."]].forEach((x,i)=>{AFTER[i].e=x[0];AFTER[i].we=x[1]});
+const QL_EN={day:'their day',feel:'feelings',people:'friends',digital:'their phone world',ideas:'dreams',us:'the two of you'};
+const QEN={
+ day:['What was the best thing that happened today?','If your day were a movie, what would it be called?','What was the hardest thing you faced today?','What did you learn today that felt new?','Your day from 1 to 10? Why that number?','If you could replay one moment from today, which one?','Which class did you enjoy most today?','Who said hi to you first at school?','What did you eat at recess? Was it good?','If your day were a news headline, what would it say?'],
+ feel:['What made you happy today?','Did anything upset you today that you want to tell me about?','When did you last feel proud of yourself?','If your feelings today were a color, what would it be?','What makes you feel safe?','Is anything on your mind these days?','What cheers you up most when you are sad?','When did you last laugh from the heart?','What is something that scares you a little?','If a friend is sad, how do you comfort them?'],
+ people:['Who made you laugh the most today?','Who is your closest friend now? What do you like about them?','Is there anyone in class who seems lonely?','If you could help someone tomorrow, who would it be?','What was the best thing you did with your friends this week?','Which teacher\'s class do you love? Why?','Who do you love sitting with most at family gatherings?','What is the nicest thing your grandpa or grandma does?','If we invited someone to dinner, who would you pick?','What do you love most about your siblings?'],
+ digital:['What is the best clip you watched this week? Show me later','Which game do you love these days? What do you like about it?','Did you see anything online you did not understand, or that bothered you?','If you taught me something on the phone, what would it be?','Who do you follow on YouTube? What do you like about them?','Do you feel the phone takes more of your time than it should?','If you designed a game, what would it be about?','Which app feels most useful to you?','Has anyone you do not know talked to you in a game or an app?','If we made a phone rule for our home, what would you suggest?'],
+ ideas:['If you had one superpower, what would you choose?','What do you want to be when you grow up? Why?','If you invented something to make life easier, what would it be?','If you could travel anywhere, where would you go?','If you were the teacher tomorrow, what would you teach the class?','What question do you wish you knew the answer to?','If you were school principal for a day, what would you change first?','If you could do something for our neighborhood, what would it be?','What project would you like to start and earn from?','If you wrote a book, what would its title be?'],
+ us:['What do you love doing with me?','What is your favorite memory with me?','If we go out this weekend, where should we go?','What would you like to learn from me?','What are you thankful to God for today?','What do you want me to know about you that I do not know yet?','What do you love most about Ramadan?','What is the best Eid you remember? Why?','If we go camping in the desert, what must we take?','Which story from my childhood do you want me to tell you?','What do you love most about grandpa\'s house?','What should we do together every Friday?']};
+const DICT={'حاضر':'Hader','مساء الخير':'Good evening','صباح الخير':'Good morning','السفرة':'Mealtime','غدا أو عشا':'Lunch or dinner','المشوار':'The ride','من المدرسة وإليها':'To and from school','قبل النوم':'Bedtime','آخر اليوم':'End of the day','وقت معهم':'Time together','لعب أو جلسة':'Play or a chat','ابدأ اللحظة':'Start the moment','شوف أسبوعك':'See your week',
+'هالأسبوع كنت معهم':'This week you were with them','هذي أرقام توضيحية، تختفي أول ما تبدأ لحظتك الأولى.':'These are sample numbers. They disappear when you start your first moment.','يوم بيوم':'Day by day','وش اللي سحبك؟':'What pulled you away?','لك أنت':'Just for you','امسح الأرقام التوضيحية':'Clear the sample numbers',
+'الشغل':'Work','الأهل':'Family','ترفيه':'Fun','طارئ':'Urgent','ما يفوتك شي مهم':"You won't miss anything important",'أكثر شي يخلّينا نمسك الجوال وقت العيال: الخوف إن شي مهم يفوتنا.':'What makes us grab the phone around the kids most is the fear of missing something important.',
+'المهمّين يوصلونك دايم':'The people who matter always get through','الوالدة':'Mom','مكالماتها ورسايلها':'Her calls and messages','تمرّ':'Gets through','يمرّ':'Gets through','المدرسة':'School','أي اتصال من رقم المدرسة':"Any call from the school's number",'أي أحد يتصل مرتين':'Anyone who calls twice','لأن اللي يعيد الاتصال غالبًا عنده شي ضروري':'Someone who calls again usually has something urgent',
+'كيف أفعّلها في جوالي؟':'How do I turn this on?','آيفون':'iPhone','أندرويد':'Android','الإعدادات ← التركيز ← (+) ← مخصص، وسمّه «حاضر».':'Settings → Focus → (+) → Custom, and name it “Hader”.','من «الأشخاص» أضف المهمّين عندك.':'Under “People”, add the people who matter.','فعّل «السماح بتكرار المكالمات».':'Turn on “Allow Repeated Calls”.','الإعدادات ← الإشعارات ← عدم الإزعاج.':'Settings → Notifications → Do Not Disturb.','فعّل «المتصلون المتكررون».':'Turn on “Repeat callers”.',
+'والباقي يستاهل رد لطيف':'Everyone else gets a kind reply','أرجع للرد الساعة':"I'll reply at",'نسخ':'Copy','تم':'Done','اللحظة':'Moment','أسبوعي':'My week','المهمّين':'People',
+'تخطّي':'Skip','التالي':'Next','يلا نبدأ':"Let's start",'ولدك':'Your son','بابا! تدري وش صار اليوم في المدرسة؟':'Dad! Guess what happened at school today?','قروب الشغل':'Work group','١٢ رسالة جديدة · «الشباب، أحد شاف الملف؟»':'12 new messages · “Did anyone see the file?”',
+'ولدك يحكي لك عن يومه..':'Your son is telling you about his day..','والجوال يرن.':'and the phone rings.','كلنا نبغى نكون معهم. بس الجوال يعرف كيف يسحبنا، حتى وإحنا جالسين جنبهم.':"We all want to be with them. But the phone knows how to pull us away, even when we're sitting right next to them.",
+'١٢ رسالة تنتظرك بعد اللحظة':'12 messages waiting for you after the moment','الوالدة تتصل':'Mom is calling','اختر لحظتك،':'Pick your moment,','والباقي علينا.':"we'll handle the rest.",'وقت السفرة، أو المشوار، أو قبل النوم. نسكّت عنك كل شي إلا المهمّين، فما يفوتك شي مهم.':'Mealtime, the school run, or bedtime. We silence everything except the people who matter, so you miss nothing important.',
+'قبل ما تنشغل':'Before you step away','دقيقة يا بطل، مكالمة مهمة وأرجع لك على طول':"One minute, champ. An important call and I'll be right back",'وأنت راجع له':'As you come back','ها يا بطل، وش صار بعدين؟ كمّل لي':'So champ, what happened next? Go on','وإذا اضطريت تنشغل..':'And if you have to step away..',
+'نعطيك كلمة تقولها قبل، وكلمة ترجع فيها بعد. لأن اللي يبقى في بالهم مو إنك انشغلت.. إنك رجعت لهم.':"We give you a word to say before, and a word to come back with. Because what stays with them isn't that you got busy.. it's that you came back.",
+'٤ س ٢٠ د':'4h 20m','كنت معهم هالأسبوع':'with them this week','وتشوف الفرق بنفسك.':'And you see the difference yourself.','ملخص أسبوعي لك وحدك: كم كنت حاضر، ووش اللي يسحبك. بدون لوم، وبدون ما يشوفه أحد غيرك.':'A weekly summary just for you: how present you were, and what pulls you away. No blame, and no one else sees it.',
+'آخر شي..':'One last thing..','مين اللي بتكون حاضر له؟':'Who will you be present for?','عشان نقترح عليك الكلمة بأسلوبك.':'So we can suggest words in your own style.','ولدي':'My son','بنتي':'My daughter','يا':'Hey','بطل':'champ','حبيبي':'buddy','عمري':'sweetheart','حبيبتي':'sweetie','أميرتي':'princess','بتسمع منك:':"They'll hear:",
+'ساكت إلا للمهمّين':'Silent except for people who matter','السفرة لكم':'Mealtime is theirs','المشوار لكم':'The ride is theirs','آخر اليوم لكم':'The end of the day is theirs','الوقت لكم':'This time is theirs','أنت معهم الحين':"You're with them now",'سؤال ثاني':'Another question',
+'لازم أرد على شي':'I need to reply to something','خلصت اللحظة':'End the moment','جرّب: كأنك طلعت للواتساب دقيقتين ورجعت':'Try it: as if you left for WhatsApp for two minutes and came back',
+'اطلع رد على اللي يحتاجك. لما ترجع لهالصفحة، نعطيك كلمة ترجع فيها.':"Go reply to whoever needs you. When you come back to this page, we'll give you a word to return with.",'خلصت الرد':"I'm done replying",'رد براحتك':'Take your time','باقي على الرجعة':'Until you are back','خلص الوقت':"Time's up",
+'ارجع له بهالكلمة':'Go back to him with this','ارجع لها بهالكلمة':'Go back to her with this','كلمة ثانية':'Another one','رجعت له':"I'm back with him",'رجعت لها':"I'm back with her",'لسا مشغول، أرجع بعدين':'Still busy, later','وش اللي سحبك؟ يبقى عندك بس':'What pulled you away? Only you see this',
+'هلا فيك، رجعت':'Welcome back','خلص الوقت، ارجع له':"Time's up, go back to him",'خلص الوقت، ارجع لها':"Time's up, go back to her",'قبل ما تنشغل، قل له:':'Before you step away, tell him:','قبل ما تنشغل، قل لها:':'Before you step away, tell her:',
+'وش اللي يحتاجك؟':'What needs you?','كم تحتاج؟':'How long?','دقيقة':'1 min','دقيقتين':'2 min','٥ دقائق':'5 min','قلتها، بروح أرد':'Said it, going to reply','خلاص، ما راح أرد':"Never mind, I won't reply",
+'كفو، كمّل معهم':'Nice, stay with them','كفو، أنت معهم':"Nice, you're with them",'انمسحت الأرقام التوضيحية':'Sample numbers cleared','حددنا النص، انسخه':'Text selected, copy it','الله يحفظهم لك':'May God keep them for you',
+'لحظة كاملة بدون مقاطعة. هذي اللي تبقى في بالهم.':"A full moment without interruption. That's what stays with them.",'انشغلت، بس رجعت لهم كل مرة. وهذا اللي يفرق.':"You stepped away, but came back every time. That's what makes the difference.",'كل لحظة تحسب. المرة الجاية، خل الرجعة أسرع.':'Every moment counts. Next time, come back a little sooner.'};
+function xl(root){if(!root)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let nd;
+  while(nd=w.nextNode()){const v=nd.nodeValue,k=v.trim();if(!k)continue;
+    if(EN()){if(DICT[k]!==undefined){nd.__ar=k;nd.nodeValue=v.replace(k,DICT[k])}}
+    else if(nd.__ar&&DICT[nd.__ar]===k){nd.nodeValue=v.replace(k,nd.__ar);nd.__ar=null}}}
+new MutationObserver(ms=>{if(!EN())return;ms.forEach(m=>{if(m.type==='characterData')xl(m.target.parentNode);else m.addedNodes.forEach(a=>xl(a.nodeType===3?a.parentNode:a))})})
+  .observe(document.body,{childList:true,subtree:true,characterData:true});
+function applyLang(){const en=EN();document.documentElement.lang=en?'en':'ar';$$('[dir]').forEach(e=>e.setAttribute('dir',en?'ltr':'rtl'));document.documentElement.setAttribute('dir',en?'ltr':'rtl');
+  $('#langBtn').textContent=en?'ع':'EN';
+  const keep=sel.value;sel.innerHTML='';for(let h=13;h<=23;h++){const o=document.createElement('option');o.value=h;o.textContent=en?(h-12)+' pm':n(h>12?h-12:h)+(h<17?' العصر':' بالليل');sel.appendChild(o)}sel.value=keep;
+  renderHome();renderReplies();if(!$('#v-week').hidden)renderWeek();setG(og);updInts();paintQ();xl(document.body)}
+$('#langBtn').onclick=()=>{S.lang=EN()?'ar':'en';save();applyLang()};
+function effTheme(){return document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
+function paintTheme(){const d=effTheme()==='dark';$('#icMoon').hidden=d;$('#icSun').hidden=!d}
+if(S.theme)document.documentElement.setAttribute('data-theme',S.theme);paintTheme();
+$('#themeBtn').onclick=()=>{S.theme=effTheme()==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',S.theme);save();paintTheme()};
+if(EN())applyLang();
+if(!S.onboarded)openOnb();
+})();
+</script>
+
+</body>
+</html>
