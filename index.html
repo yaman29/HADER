@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#24614F">
-<meta name="description" content="حاضر: يحمي لحظات الوالد مع أبنائه من سحب الجوال، ويعينه على الرجوع لهم بلطف.">
+<meta name="description" content="حاضر: يعين الوالد يكون حاضر مع أبنائه وسط أشغال الحياة، ويرجع لهم بلطف إذا انشغل.">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>حاضر</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -310,7 +310,7 @@ details.how ol{margin:0;padding:0 38px 18px 18px;display:flex;flex-direction:col
         <p class="sample-note" id="sampleNote" hidden style="margin-top:8px">هذي أرقام توضيحية، تختفي أول ما تبدأ لحظتك الأولى.</p>
       </div>
       <div class="sec"><h2>يوم بيوم</h2><div class="days" id="days"></div></div>
-      <div class="sec"><h2>وش اللي سحبك؟</h2><div class="pulls" id="pulls"></div></div>
+      <div class="sec"><h2>وش اللي شغلك؟</h2><div class="pulls" id="pulls"></div></div>
       <div class="sec"><h2>لك أنت</h2><div class="thoughts" id="thoughts"></div></div>
       <button class="plain" type="button" id="clearSample" hidden>امسح الأرقام التوضيحية</button>
     </section>
@@ -373,7 +373,7 @@ details.how ol{margin:0;padding:0 38px 18px 18px;display:flex;flex-direction:col
         </div>
         <div style="display:flex;flex-direction:column;gap:12px">
           <h2>ولدك يحكي لك عن يومه..<br>والجوال يرن.</h2>
-          <p class="s">كلنا نبغى نكون معهم. بس الجوال يعرف كيف يسحبنا، حتى وإحنا جالسين جنبهم.</p>
+          <p class="s">كلنا نحب نجلس مع عيالنا ونعطيهم وقتنا. بس أشغال الحياة تضطرنا أحيانًا، حتى وإحنا جالسين جنبهم.</p>
         </div>
       </div>
       <div class="slide gut">
@@ -403,7 +403,7 @@ details.how ol{margin:0;padding:0 38px 18px 18px;display:flex;flex-direction:col
         </div>
         <div style="display:flex;flex-direction:column;gap:12px">
           <h2>وتشوف الفرق بنفسك.</h2>
-          <p class="s">ملخص أسبوعي لك وحدك: كم كنت حاضر، ووش اللي يسحبك. بدون لوم، وبدون ما يشوفه أحد غيرك.</p>
+          <p class="s">ملخص أسبوعي لك وحدك: كم كنت حاضر، ووش اللي يشغلك عنهم. بدون لوم، وبدون ما يشوفه أحد غيرك.</p>
         </div>
       </div>
       <div class="slide gut">
@@ -599,12 +599,12 @@ function renderWeek(){
   $('#pulls').innerHTML=Object.entries(REASONS).map(([k,l])=>`<div class="pull"><span>${l}</span><div class="t"><i style="width:${c[k]/top*100}%"></i></div><b>${n(c[k])}</b></div>`).join('');
   const TH=[];const REASONS_EN={work:'work',family:'family',fun:'fun',urgent:'something urgent'};
   if(ints.length){const [k,v]=Object.entries(c).sort((a,b)=>b[1]-a[1])[0],pct=Math.round(v/ints.length*100);
-    TH.push(k==='work'?{t:EN()?`${pct}% of what pulled you away was work. A kind reply in the group covers most of it.`:`${n(pct)}٪ من اللي سحبك كان شغل. ردّ لطيف في القروب يكفيك أغلبها.`,w:false}:{t:EN()?`What pulled you most: ${REASONS_EN[k]}.`:`أكثر شي سحبك: ${REASONS[k]}.`});
+    TH.push(k==='work'?{t:EN()?`${pct}% of the times you stepped away were for work. A kind reply in the group covers most of it.`:`${n(pct)}٪ من انشغالك كان للشغل. ردّ لطيف في القروب يكفيك أغلبها.`,w:false}:{t:EN()?`What kept you busy most: ${REASONS_EN[k]}.`:`أكثر شي شغلك: ${REASONS[k]}.`});
     const ret=Math.round(ints.filter(i=>i.returned).length/ints.length*100);
     TH.push({t:EN()?`You came back to them after ${ret}% of the times you stepped away. That's what stays with them.`:`رجعت لهم بعد ${n(ret)}٪ من المرات اللي انشغلت فيها. هذا اللي يبقى في بالهم.`,w:true});
     const ann=Math.round(ints.filter(i=>i.announced).length/ints.length*100);
     TH.push({t:EN()?`${ann}% of the time you told them before stepping away. A kind word makes a difference.`:`في ${n(ann)}٪ من المرات قلت لهم قبل ما تنشغل. الكلمة اللطيفة تفرق.`});
-  }else TH.push({t:EN()?(w.length?'Not one interruption this week. May God keep them for you.':"Start your first moment and we'll show you what pulls you away."):(w.length?'ولا مقاطعة هالأسبوع. الله يحفظهم لك.':'ابدأ أول لحظة، وهنا بنقول لك وش اللي يسحبك.'),w:true});
+  }else TH.push({t:EN()?(w.length?'Not one interruption this week. May God keep them for you.':"Start your first moment and you'll see what keeps you busy."):(w.length?'ولا مقاطعة هالأسبوع. الله يحفظهم لك.':'ابدأ أول لحظة، وهنا بتشوف وش اللي يشغلك عنهم.'),w:true});
   $('#thoughts').innerHTML=TH.map(x=>`<div class="thought${x.w?' warm':''}">${x.t}</div>`).join('');
 }
 $('#clearSample').onclick=()=>{S.sessions=[];S.sample=false;save();renderWeek();renderHome();toast('انمسحت الأرقام التوضيحية')};
@@ -718,7 +718,7 @@ function backMode(it){
   const upd=()=>{$('#bkP').textContent=fill(back.ph);$('#bkW').textContent=whyOf(back.ph)};upd();
   $('#bkN').onclick=()=>{back.ph=pick(AFTER,back.ph);upd()};
   const rs=$('#bkReason');rs.hidden=!!it.reason;
-  rs.innerHTML=it.reason?'':`<small>وش اللي سحبك؟ يبقى عندك بس</small><div class="chips" role="group">${Object.entries(REASONS).map(([k,l])=>`<button type="button" class="chip" data-br="${k}" aria-pressed="false">${l}</button>`).join('')}</div>`;
+  rs.innerHTML=it.reason?'':`<small>وش اللي شغلك؟ يبقى عندك بس</small><div class="chips" role="group">${Object.entries(REASONS).map(([k,l])=>`<button type="button" class="chip" data-br="${k}" aria-pressed="false">${l}</button>`).join('')}</div>`;
   $$('#bkReason [data-br]').forEach(b=>b.onclick=()=>{$$('#bkReason [data-br]').forEach(x=>x.setAttribute('aria-pressed',x===b));back.reason=b.dataset.br});
   setMode('back');
 }
@@ -752,22 +752,22 @@ const QEN={
  ideas:['If you had one superpower, what would you choose?','What do you want to be when you grow up? Why?','If you invented something to make life easier, what would it be?','If you could travel anywhere, where would you go?','If you were the teacher tomorrow, what would you teach the class?','What question do you wish you knew the answer to?','If you were school principal for a day, what would you change first?','If you could do something for our neighborhood, what would it be?','What project would you like to start and earn from?','If you wrote a book, what would its title be?'],
  us:['What do you love doing with me?','What is your favorite memory with me?','If we go out this weekend, where should we go?','What would you like to learn from me?','What are you thankful to God for today?','What do you want me to know about you that I do not know yet?','What do you love most about Ramadan?','What is the best Eid you remember? Why?','If we go camping in the desert, what must we take?','Which story from my childhood do you want me to tell you?','What do you love most about grandpa\'s house?','What should we do together every Friday?']};
 const DICT={'حاضر':'Hader','مساء الخير':'Good evening','صباح الخير':'Good morning','السفرة':'Mealtime','غدا أو عشا':'Lunch or dinner','المشوار':'The ride','من المدرسة وإليها':'To and from school','قبل النوم':'Bedtime','آخر اليوم':'End of the day','وقت معهم':'Time together','لعب أو جلسة':'Play or a chat','ابدأ اللحظة':'Start the moment','شوف أسبوعك':'See your week',
-'هالأسبوع كنت معهم':'This week you were with them','هذي أرقام توضيحية، تختفي أول ما تبدأ لحظتك الأولى.':'These are sample numbers. They disappear when you start your first moment.','يوم بيوم':'Day by day','وش اللي سحبك؟':'What pulled you away?','لك أنت':'Just for you','امسح الأرقام التوضيحية':'Clear the sample numbers',
+'هالأسبوع كنت معهم':'This week you were with them','هذي أرقام توضيحية، تختفي أول ما تبدأ لحظتك الأولى.':'These are sample numbers. They disappear when you start your first moment.','يوم بيوم':'Day by day','وش اللي شغلك؟':'What kept you busy?','لك أنت':'Just for you','امسح الأرقام التوضيحية':'Clear the sample numbers',
 'الشغل':'Work','الأهل':'Family','ترفيه':'Fun','طارئ':'Urgent','ما يفوتك شي مهم':"You won't miss anything important",'أكثر شي يخلّينا نمسك الجوال وقت العيال: الخوف إن شي مهم يفوتنا.':'What makes us grab the phone around the kids most is the fear of missing something important.',
 'المهمّين يوصلونك دايم':'The people who matter always get through','الوالدة':'Mom','مكالماتها ورسايلها':'Her calls and messages','تمرّ':'Gets through','يمرّ':'Gets through','المدرسة':'School','أي اتصال من رقم المدرسة':"Any call from the school's number",'أي أحد يتصل مرتين':'Anyone who calls twice','لأن اللي يعيد الاتصال غالبًا عنده شي ضروري':'Someone who calls again usually has something urgent',
 'كيف أفعّلها في جوالي؟':'How do I turn this on?','آيفون':'iPhone','أندرويد':'Android','الإعدادات ← التركيز ← (+) ← مخصص، وسمّه «حاضر».':'Settings → Focus → (+) → Custom, and name it “Hader”.','من «الأشخاص» أضف المهمّين عندك.':'Under “People”, add the people who matter.','فعّل «السماح بتكرار المكالمات».':'Turn on “Allow Repeated Calls”.','الإعدادات ← الإشعارات ← عدم الإزعاج.':'Settings → Notifications → Do Not Disturb.','فعّل «المتصلون المتكررون».':'Turn on “Repeat callers”.',
 'والباقي يستاهل رد لطيف':'Everyone else gets a kind reply','أرجع للرد الساعة':"I'll reply at",'نسخ':'Copy','تم':'Done','اللحظة':'Moment','أسبوعي':'My week','المهمّين':'People',
 'تخطّي':'Skip','التالي':'Next','يلا نبدأ':"Let's start",'ولدك':'Your son','بابا! تدري وش صار اليوم في المدرسة؟':'Dad! Guess what happened at school today?','قروب الشغل':'Work group','١٢ رسالة جديدة · «الشباب، أحد شاف الملف؟»':'12 new messages · “Did anyone see the file?”',
-'ولدك يحكي لك عن يومه..':'Your son is telling you about his day..','والجوال يرن.':'and the phone rings.','كلنا نبغى نكون معهم. بس الجوال يعرف كيف يسحبنا، حتى وإحنا جالسين جنبهم.':"We all want to be with them. But the phone knows how to pull us away, even when we're sitting right next to them.",
+'ولدك يحكي لك عن يومه..':'Your son is telling you about his day..','والجوال يرن.':'and the phone rings.','كلنا نحب نجلس مع عيالنا ونعطيهم وقتنا. بس أشغال الحياة تضطرنا أحيانًا، حتى وإحنا جالسين جنبهم.':"We all love sitting with our kids and giving them our time. But life's demands sometimes call us away, even when we're right next to them.",
 '١٢ رسالة تنتظرك بعد اللحظة':'12 messages waiting for you after the moment','الوالدة تتصل':'Mom is calling','اختر لحظتك،':'Pick your moment,','والباقي علينا.':"we'll handle the rest.",'وقت السفرة، أو المشوار، أو قبل النوم. نسكّت عنك كل شي إلا المهمّين، فما يفوتك شي مهم.':'Mealtime, the school run, or bedtime. We silence everything except the people who matter, so you miss nothing important.',
 'قبل ما تنشغل':'Before you step away','دقيقة يا بطل، مكالمة مهمة وأرجع لك على طول':"One minute, champ. An important call and I'll be right back",'وأنت راجع له':'As you come back','ها يا بطل، وش صار بعدين؟ كمّل لي':'So champ, what happened next? Go on','وإذا اضطريت تنشغل..':'And if you have to step away..',
 'نعطيك كلمة تقولها قبل، وكلمة ترجع فيها بعد. لأن اللي يبقى في بالهم مو إنك انشغلت.. إنك رجعت لهم.':"We give you a word to say before, and a word to come back with. Because what stays with them isn't that you got busy.. it's that you came back.",
-'٤ س ٢٠ د':'4h 20m','كنت معهم هالأسبوع':'with them this week','وتشوف الفرق بنفسك.':'And you see the difference yourself.','ملخص أسبوعي لك وحدك: كم كنت حاضر، ووش اللي يسحبك. بدون لوم، وبدون ما يشوفه أحد غيرك.':'A weekly summary just for you: how present you were, and what pulls you away. No blame, and no one else sees it.',
+'٤ س ٢٠ د':'4h 20m','كنت معهم هالأسبوع':'with them this week','وتشوف الفرق بنفسك.':'And you see the difference yourself.','ملخص أسبوعي لك وحدك: كم كنت حاضر، ووش اللي يشغلك عنهم. بدون لوم، وبدون ما يشوفه أحد غيرك.':'A weekly summary just for you: how present you were, and what keeps you busy. No blame, and no one else sees it.',
 'آخر شي..':'One last thing..','مين اللي بتكون حاضر له؟':'Who will you be present for?','عشان نقترح عليك الكلمة بأسلوبك.':'So we can suggest words in your own style.','ولدي':'My son','بنتي':'My daughter','يا':'Hey','بطل':'champ','حبيبي':'buddy','عمري':'sweetheart','حبيبتي':'sweetie','أميرتي':'princess','بتسمع منك:':"They'll hear:",
 'ساكت إلا للمهمّين':'Silent except for people who matter','السفرة لكم':'Mealtime is theirs','المشوار لكم':'The ride is theirs','آخر اليوم لكم':'The end of the day is theirs','الوقت لكم':'This time is theirs','أنت معهم الحين':"You're with them now",'سؤال ثاني':'Another question',
 'لازم أرد على شي':'I need to reply to something','خلصت اللحظة':'End the moment','جرّب: كأنك طلعت للواتساب دقيقتين ورجعت':'Try it: as if you left for WhatsApp for two minutes and came back',
 'اطلع رد على اللي يحتاجك. لما ترجع لهالصفحة، نعطيك كلمة ترجع فيها.':"Go reply to whoever needs you. When you come back to this page, we'll give you a word to return with.",'خلصت الرد':"I'm done replying",'رد براحتك':'Take your time','باقي على الرجعة':'Until you are back','خلص الوقت':"Time's up",
-'ارجع له بهالكلمة':'Go back to him with this','ارجع لها بهالكلمة':'Go back to her with this','كلمة ثانية':'Another one','رجعت له':"I'm back with him",'رجعت لها':"I'm back with her",'لسا مشغول، أرجع بعدين':'Still busy, later','وش اللي سحبك؟ يبقى عندك بس':'What pulled you away? Only you see this',
+'ارجع له بهالكلمة':'Go back to him with this','ارجع لها بهالكلمة':'Go back to her with this','كلمة ثانية':'Another one','رجعت له':"I'm back with him",'رجعت لها':"I'm back with her",'لسا مشغول، أرجع بعدين':'Still busy, later','وش اللي شغلك؟ يبقى عندك بس':'What kept you busy? Only you see this',
 'هلا فيك، رجعت':'Welcome back','خلص الوقت، ارجع له':"Time's up, go back to him",'خلص الوقت، ارجع لها':"Time's up, go back to her",'قبل ما تنشغل، قل له:':'Before you step away, tell him:','قبل ما تنشغل، قل لها:':'Before you step away, tell her:',
 'وش اللي يحتاجك؟':'What needs you?','كم تحتاج؟':'How long?','دقيقة':'1 min','دقيقتين':'2 min','٥ دقائق':'5 min','قلتها، بروح أرد':'Said it, going to reply','خلاص، ما راح أرد':"Never mind, I won't reply",
 'كفو، كمّل معهم':'Nice, stay with them','كفو، أنت معهم':"Nice, you're with them",'انمسحت الأرقام التوضيحية':'Sample numbers cleared','حددنا النص، انسخه':'Text selected, copy it','الله يحفظهم لك':'May God keep them for you',
